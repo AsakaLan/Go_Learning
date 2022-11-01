@@ -117,6 +117,10 @@ type bmap struct{
 }
 ~~~
 
+![image-20221026092616764](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221026092616764.png)
+
+![image-20221026092709764](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221026092709764.png)
+
 ### 4.2map的创建方式
 
 1. 通过make创建
@@ -162,6 +166,8 @@ type bmap struct{
 
 1. 给map加锁(开销大，性能低，不提倡)
 2. 使用sync.Map
+   1. ![image-20221026125204660](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221026125204660.png)
+
 
 **Map总结**
 
@@ -241,6 +247,52 @@ m0代表主线程，g0代表了线程的堆栈。调度都是在系统堆栈上�
 
 ​	对子协程派生出来的孙子协程的控制方便。
 
+## 为什么使用通信来共享内存？
+
+1. 避免协程之间的竞争和数据的冲突
+2. 更高级的抽象、降低开发难度、增加程序可读性
+3. 模块之间更容易解耦合
+
+## Channel发送的情形
+
+1. 直接发送
+2. 放入缓存
+3. 休眠等待
+
+![image-20221025133358600](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025133358600.png)
+
+## 
+
+**Channel接受的情形**
+
+1. 有等待的G，从G接收
+2. 有等待的G，从缓存接收
+3. 接收缓存
+4. 阻塞接收
+
+**锁的基础**
+
+1. atomic操作
+   1. 原子操作是一种硬件层面加锁的机制，可以用于操作一个变量的时候，其他协程/线程没法访问，但只能用于简单变量的操作
+2. sema锁(信号量锁)
+   1. 核心是一个uint32值，含义是同时可以并发的数量
+   2. 每一个sema锁对应一个SemaRoot结构体
+   3. 每个SemaRoot中有一个平衡二叉树用于协程排队
+3. ![image-20221025135617317](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025135617317.png)
+
+
+
+**Muetex(互斥锁)**
+
+![image-20221025135807502](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025135807502.png)
+
+
+
+![image-20221025135907103](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025135907103.png)
+
+
+
+![image-20221025135923549](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025135923549.png)
 
 
 
@@ -248,30 +300,40 @@ m0代表主线程，g0代表了线程的堆栈。调度都是在系统堆栈上�
 
 
 
+![image-20221025140150927](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025140150927.png)
 
 
 
 
 
+![image-20221025140207356](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025140207356.png)
 
 
 
+![image-20221025140345961](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025140345961.png)
 
+**RWMutex(读写锁)**
 
+![image-20221025140749588](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025140749588.png)
 
+**WaitGroup**
 
+![image-20221025141030879](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025141030879.png)
 
+![image-20221025141047773](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025141047773.png)
 
+**协程的底层结构**
 
+![image-20221025141816407](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025141816407.png)
 
+**线程的抽象**
 
+![image-20221025142011765](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025142011765.png)
 
+**单线程循环**
 
+![image-20221025142057914](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025142057914.png)
 
+![image-20221025142618586](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025142618586.png)
 
-
-
-
-
-
-
+![image-20221025142819716](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20221025142819716.png)
