@@ -2,7 +2,7 @@
 
 **不同点**
 
-1. 作用变量的类型不同，new用于给string，int，array分配内存；make用于给slice，map，channel分配内存。
+1. 作用变量的类型不同，new可以给任何类型分配内存；make用于给slice，map，channel分配内存。
 2. 返回的类型不同，new返回变量的指针，make则返回变量本身。
 3. new只是分配内存并清零，并没有初始化内存；make即分配内存，也初始化内存。
 
